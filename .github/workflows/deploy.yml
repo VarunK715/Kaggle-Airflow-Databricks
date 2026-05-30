@@ -1,0 +1,36 @@
+name: Production Data Platform Deployer
+
+# This ensures the script triggers EVERY time you push code to your main branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_to_databricks:
+    runs-on: ubuntu-latest  # Spins up a secure background Ubuntu machine
+
+    steps:
+    # Step 1: Copy your files out of GitHub onto the runner machine
+    - name: Clone Repository Code
+      uses: actions/checkout@v4
+
+    # Step 2: Install Python
+    - name: Set up Python Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    # Step 3: Download and install the official Databricks CLI
+    - name: Install Databricks CLI
+      run: |
+        curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+
+    # Step 4: Inject your notebooks into Databricks using Workspace upload tools
+    - name: Deploy Notebooks to Shared Workspace Folder
+      env:
+        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      run: |
+        # This takes your local vs-code folder and forces it into the Databricks production directory
+        databricks workspace import-dir ./databricks_notebooks /Shared/production_pipelines --overwrite
