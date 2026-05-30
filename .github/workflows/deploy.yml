@@ -27,6 +27,7 @@ jobs:
         curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
 
     # Step 4: Inject your notebooks into Databricks using Workspace upload tools
+    # Note: Community Edition doesn't allow global /Shared paths, we route directly to your /Users/ folder
     - name: Deploy Notebooks to Shared Workspace Folder
       env:
         DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
