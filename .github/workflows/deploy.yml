@@ -33,4 +33,4 @@ jobs:
         DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
       run: |
         # This takes your local vs-code folder and forces it into the Databricks production directory
-        databricks workspace import-dir ./databricks_notebooks /Shared/production_pipelines --overwrite
+        databricks workspace import-dir ./databricks_notebook /Shared/production_pipelines --overwrite
